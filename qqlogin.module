@@ -283,6 +283,18 @@ function qqlogin_login_binding_form($form, &$form_state, $account) {
 			'#submit' => array('qqlogin_login_binding_form_submit_detach')
 		);
 	} else {
+		if(isset($_SESSION['qq_dup_account'])) {
+			$form['error']=array(
+				'#markup' => '<div class="messages error">'.t('!nickname is already bound with another account.', array('!nickname'=>$_SESSION['qq_dup_account'])).
+							t('If you still want to bind with current user, please do as following steps:').'<br/>'.
+							'<ol><li>'.l(t('Logout now'), 'user/logout').'</li><li>'.
+							t('Login in via QQ User !nickname', array('!nickname'=>$_SESSION['qq_dup_account'])).'</li><li>'.
+							t('Detach QQ user from newly logged in user').'</li><li>'.
+							t('Login in as !name again', array('!name'=>$account->name)).
+							'</li></ol></div>',
+			);
+			unset($_SESSION['qq_dup_account']);
+		}
 		$form['desc']=array(
 			'#type' => 'item',
 			'#markup' => t('You have not bound your account with QQ user.').t('Click following button to bound your account.')
@@ -319,6 +331,8 @@ function qqlogin_login_binding_form_submit_detach($form, $form_state) {
 			drupal_set_message(t('For your safe, we have regenerate your password as @pass.', array('@pass'=>$userpass)), 'warning');
 		}
 	}
+	if($account->mail==$form_state['storage']['qqopenid'].'@opensns.qq.com' || is_null($account->mail))
+		user_save($account, array('mail'=>NULL));
 }
 
 function qqqlogin_login_binding_form_submit_bound($form, &$form_state) {
@@ -367,8 +381,10 @@ function qqlogin_login_binding_callback($account) {
 							$ret=json_decode($r->data);
 							$nick=$ret->nickname;
 						} else $nick=t('This QQ user');
-						drupal_set_message(t('!nickname is already bound with another account.', array('!nickname'=>$nick)), 'error');
+						$_SESSION['qq_dup_account']=$nick;
 					} else {
+						if(empty($account->mail))
+							user_save($account, array('mail'=>$openid.'@opensns.qq.com'));
 						user_set_authmaps($account, array("authname_qqlogin" => 'qq_openid_'.$openid));
 						$i=db_merge('qqlogin')->key(array('uid'=>$account->uid))->fields(array(
 							'uid' => $account->uid,
