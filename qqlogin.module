@@ -338,7 +338,7 @@ function qqlogin_username_alter(&$username, $account) {
 		if(empty($r->name))
 			$usernmae=t('QQ User');
 		else {
-			$username=$nickname;
+			$username=$r->name;
 		}
 	}
 }
