@@ -140,6 +140,8 @@ function qqlogin_form_user_login_qqlogin_submit($form, &$form_state) {
 }
 
 function qqlogin_form_user_profile_form_alter(&$form, $form_state) {
+	if(!db_query('SELECT EXISTS(SELECT * FROM {qqlogin} WHERE uid=:uid)', array(':uid'=>$form['#user']->uid))->fetchField())
+		return;
 	$form['account']['pass']['#type']='hidden';
 	$form['account']['current_pass']['#type']='hidden';
 	if(!isset($form['account']['socialnetwork']))
@@ -189,7 +191,8 @@ function qqlogin_login_callback() {
 					$openid=$ret['openid'];
 					user_external_login_register('qq_openid_'.$openid, 'qqlogin');
 					$user=user_load($GLOBALS['user']->uid);
-					user_save($user, array('mail'=>$openid.'@opensns.qq.com'));
+					if(empty($user->mail))
+						user_save($user, array('mail'=>$openid.'@opensns.qq.com'));
 					$i=db_merge('qqlogin')->key(array('uid'=>$GLOBALS['user']->uid))->fields(array(
 						'uid' => $GLOBALS['user']->uid,
 						'openid' => $openid,
@@ -263,6 +266,7 @@ function qqlogin_login_binding_form($form, &$form_state, $account) {
 			'#markup' => t('You are now bound with following QQ user.')
 		);
 		$form_state['storage']['qqnickname']=$r->name;
+		$form_state['storage']['qqopenid']=$r->openid;
 		$form['qquser']=array(
 			'#type' => 'item',
 			'#markup' => $r->name,
@@ -273,15 +277,11 @@ function qqlogin_login_binding_form($form, &$form_state, $account) {
 			$form['qquser']['#prefix'].=sprintf('<img src="%s" style="vertical-align:middle"/> ', $r->face);
 		else
 			$form['qquser']['#prefix'].=sprintf('<img src="%s"/>', 'http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_1.png');
-		if($account->name == 'qq_openid_'.$r->openid) {
-			$form['desc']['#markup'].=t('But your account cannot be detached, because you are registered via QQ user.');
-		} else {
-			$form['detach']=array(
-				'#type' => 'submit',
-				'#value' => t('Detach my account with above QQ user'),
-				'#submit' => array('qqlogin_login_binding_form_submit_detach')
-			);
-		}
+		$form['detach']=array(
+			'#type' => 'submit',
+			'#value' => t('Detach my account with above QQ user'),
+			'#submit' => array('qqlogin_login_binding_form_submit_detach')
+		);
 	} else {
 		$form['desc']=array(
 			'#type' => 'item',
@@ -297,10 +297,28 @@ function qqlogin_login_binding_form($form, &$form_state, $account) {
 }
 
 function qqlogin_login_binding_form_submit_detach($form, $form_state) {
-	db_delete('qqlogin')->condition('uid',$form_state['storage']['user']->uid)->execute();
+	$account=$form_state['storage']['user'];
+	db_delete('qqlogin')->condition('uid',$account->uid)->execute();
 	user_set_authmaps($form_state['storage']['user'], array("authname_qqlogin" => ''));
 	drupal_set_message(t('Successfully detached from @nickname.', array('@nickname'=>$form_state['storage']['qqnickname'])));
 	watchdog('user', 'Detached from QQ user @nick.', array('@nick' => $form_state['storage']['qqnickname']));
+	if($account->name=='qq_openid_'.$form_state['storage']['qqopenid']) {
+		$i=0;
+		do {
+			$newusername=$form_state['storage']['qqnickname'];
+			if($i) $newusername.=$i;
+			$i++;
+		} while(user_load_by_name($newusername));
+		$userpass=user_password();
+		user_save($account, array('name'=>$newusername, 'pass'=>$userpass));
+		drupal_set_message(t('As you are registered via QQ user, we have renewed your account. Your username name is @username, and your password is @pass.', array('@username'=>$newusername, '@pass'=>$userpass)), 'warning');
+	} else {
+		$userpass=user_password();
+		if($account->uid>1) {
+			user_save($account, array('pass'=>$userpass));
+			drupal_set_message(t('For your safe, we have regenerate your password as @pass.', array('@pass'=>$userpass)), 'warning');
+		}
+	}
 }
 
 function qqqlogin_login_binding_form_submit_bound($form, &$form_state) {
