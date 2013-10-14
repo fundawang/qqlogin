@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * This file is licensed under GPLv2+.
+*/
+
+/**
+ * @file
+ * Install, update and uninstall functions for the qqlogin module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function qqlogin_schema() {
+	$schema['qqlogin'] = array(
+		'fields' => array(
+			'uid' => array('type' => 'int','not null' => TRUE, 'default'=>0),
+			'openid' => array('type' => 'varchar', 'length' => '100', 'not null' => TRUE, 'default' =>''),
+			'access_token' => array('type' => 'varchar', 'length' => '100', 'not null' => TRUE, 'default' =>''),
+			'name' => array('type' => 'varchar', 'length' => '100', 'not null' => TRUE, 'default' =>''),
+		),
+		'primary key' => array('uid'),
+		'unique keys' => array(
+			'openid' => array('openid')
+		),
+	);
+	return $schema;
+}
+?>

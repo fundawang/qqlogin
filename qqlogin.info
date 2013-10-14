@@ -1,0 +1,7 @@
+name = QQ Login
+description = Provides QQ OAuth Login feature for drupal
+package = Social Network
+core = 7.x
+configure = admin/config/services/qqlogin
+
+version = "7.x-0.1"
