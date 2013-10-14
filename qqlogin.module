@@ -94,6 +94,7 @@ function qqlogin_form_user_login_alter(&$form, &$form_state) {
 	$form['actions']['qqlogin']=array(
 		'#type' => 'image_button',
 		'#src' => 'http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_4.png',
+		'#attributes' => array('title'=>t('Login via QQ User')),
 		'#limit_validation_errors' => array(),
 		'#submit' => array('qqlogin_form_user_login_qqlogin_submit'),
 	);
