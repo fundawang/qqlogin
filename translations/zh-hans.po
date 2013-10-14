@@ -4,13 +4,14 @@
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
 #  qqlogin.module: n/a
+#  qqlogin.install: n/a
 #  qqlogin.info: n/a
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2013-10-14 11:06+0800\n"
-"PO-Revision-Date: 2013-10-14 11:06+0800\n"
+"POT-Creation-Date: 2013-10-14 14:15+0800\n"
+"PO-Revision-Date: 2013-10-14 14:15+0800\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese, Simplified <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -18,93 +19,113 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: qqlogin.module:64
+#: qqlogin.module:76
 msgid "QQ OpenSNS APP ID"
 msgstr "QQ 互联 APP ID"
 
-#: qqlogin.module:72
+#: qqlogin.module:84
 msgid "QQ OpenSNS APP Key"
 msgstr "QQ 互联 APP Key"
 
-#: qqlogin.module:97;108
+#: qqlogin.module:92
+msgid "QQ OpenSNS Verify Code"
+msgstr "QQ 互联验证码"
+
+#: qqlogin.module:119
 msgid "Login via QQ User"
 msgstr "用 QQ 用户登录"
 
-#: qqlogin.module:129;136
+#: qqlogin.module:150;157
 msgid "Password Changing"
 msgstr "密码更改"
 
-#: qqlogin.module:130
+#: qqlogin.module:151
 msgid "You do not need to change your password, because your account is bound with QQ user !nickname."
 msgstr "您无需更改密码，因为您已与 QQ 用户 !nickname 绑定。"
 
-#: qqlogin.module:137
+#: qqlogin.module:158
 msgid "You do not need to change your password, because your account is bound with multiple social networks."
 msgstr "您无需更改密码，因为您已与多个社交网络用户绑定。"
 
-#: qqlogin.module:209
+#: qqlogin.module:256
+msgid "!nick has revolked authorization from QQ.com"
+msgstr "!nick 已经从 QQ.com 收回了授权"
+
+#: qqlogin.module:265
 msgid "You are now bound with following QQ user."
 msgstr "您现在与以下 QQ 用户绑定。"
 
-#: qqlogin.module:241
-msgid "But your account cannot be detached, because you are registered via QQ user."
-msgstr "目前无法将您的账户解除绑定，因为您注册时使用的是 QQ 用户。"
-
-#: qqlogin.module:245
+#: qqlogin.module:281
 msgid "Detach my account with above QQ user"
 msgstr "与此 QQ 用户解除绑定"
 
-#: qqlogin.module:252
+#: qqlogin.module:287
 msgid "You have not bound your account with QQ user."
 msgstr "您尚未与 QQ 用户绑定。"
 
-#: qqlogin.module:252
+#: qqlogin.module:287
 msgid "Click following button to bound your account."
 msgstr "点击按钮可绑定您的账户。"
 
-#: qqlogin.module:266
+#: qqlogin.module:302
 msgid "Successfully detached from @nickname."
 msgstr "与 @nickname 成功解除绑定。"
 
-#: qqlogin.module:315
+#: qqlogin.module:313
+msgid "As you are registered via QQ user, we have renewed your account. Your username name is @username, and your password is @pass."
+msgstr "因为您是通过 QQ 用户注册的，解除绑定后系统重新为您指派了用户名和密码。您现在的用户名是 @username，密码是 @pass。"
+
+#: qqlogin.module:317
+msgid "For your safe, we have regenerate your password as @pass."
+msgstr "为安全期间，系统重新生成了您的密码。您现在的密码是 @pass。"
+
+#: qqlogin.module:366
 msgid "This QQ user"
 msgstr "此 QQ 用户"
 
-#: qqlogin.module:316
+#: qqlogin.module:367
 msgid "!nickname is already bound with another account."
 msgstr "!nickname 已与其它账户绑定。"
 
-#: qqlogin.module:339
+#: qqlogin.module:390
 msgid "Successfully bound with @nickname."
 msgstr "与 @nickname 成功绑定。"
 
-#: qqlogin.module:339;340;353
+#: qqlogin.module:390;391;404
 msgid "QQ User"
 msgstr "QQ 用户"
 
-#: qqlogin.module:267;340
+#: qqlogin.module:255;303;391
 msgid "user"
 msgstr "用户"
 
-#: qqlogin.module:267
+#: qqlogin.module:255
+msgid "Automatically detached from QQ user @nick."
+msgstr "与 QQ 用户 @nick 自动解除绑定。"
+
+#: qqlogin.module:303
 msgid "Detached from QQ user @nick."
 msgstr "与 QQ 用户 @nick 解除绑定。"
 
-#: qqlogin.module:340
+#: qqlogin.module:391
 msgid "Bound with QQ user @nick."
 msgstr "与 QQ 用户 @nick 绑定。"
 
-#: qqlogin.module:17
+#: qqlogin.module:29
 msgid "QQ Login settings"
 msgstr "QQ 登录设置"
 
-#: qqlogin.module:18
+#: qqlogin.module:30
 msgid "QQ Login settings."
 msgstr "QQ 登录设置。"
 
-#: qqlogin.module:30
+#: qqlogin.module:42
 msgid "QQ Login binding"
 msgstr "QQ 登录绑定"
+
+#: qqlogin.install:34
+msgid "The App ID is not set, click !url to set it."
+msgstr "APP ID 尚未设置，点击 !url 可设置。"
 
 #: qqlogin.info:0
 msgid "QQ Login"
