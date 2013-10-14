@@ -27,4 +27,11 @@ function qqlogin_schema() {
 	);
 	return $schema;
 }
+
+function qqloing_enable() {
+	$appid=variable_get('qqlogin_appid');
+	if(empty($appid))
+		drupal_set_message(t('The App ID is not set, click !url to set it.', array('!url'=>l('here', 'admin/config/services/qqlogin'))), 'error');
+
+}
 ?>
