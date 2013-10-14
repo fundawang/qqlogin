@@ -77,7 +77,7 @@ msgstr "因为您是通过 QQ 用户注册的，解除绑定后系统重新为�
 
 #: qqlogin.module:317
 msgid "For your safe, we have regenerate your password as @pass."
-msgstr "为安全期间，系统重新生成了您的密码。您现在的密码是 @pass。"
+msgstr "为安全起见，系统重新生成了您的密码。您现在的密码是 @pass。"
 
 #: qqlogin.module:366
 msgid "This QQ user"
