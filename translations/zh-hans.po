@@ -1,0 +1,120 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  qqlogin.module: n/a
+#  qqlogin.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-10-14 11:06+0800\n"
+"PO-Revision-Date: 2013-10-14 11:06+0800\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese, Simplified <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: qqlogin.module:64
+msgid "QQ OpenSNS APP ID"
+msgstr "QQ 互联 APP ID"
+
+#: qqlogin.module:72
+msgid "QQ OpenSNS APP Key"
+msgstr "QQ 互联 APP Key"
+
+#: qqlogin.module:97;108
+msgid "Login via QQ User"
+msgstr "用 QQ 用户登录"
+
+#: qqlogin.module:129;136
+msgid "Password Changing"
+msgstr "密码更改"
+
+#: qqlogin.module:130
+msgid "You do not need to change your password, because your account is bound with QQ user !nickname."
+msgstr "您无需更改密码，因为您已与 QQ 用户 !nickname 绑定。"
+
+#: qqlogin.module:137
+msgid "You do not need to change your password, because your account is bound with multiple social networks."
+msgstr "您无需更改密码，因为您已与多个社交网络用户绑定。"
+
+#: qqlogin.module:209
+msgid "You are now bound with following QQ user."
+msgstr "您现在与以下 QQ 用户绑定。"
+
+#: qqlogin.module:241
+msgid "But your account cannot be detached, because you are registered via QQ user."
+msgstr "目前无法将您的账户解除绑定，因为您注册时使用的是 QQ 用户。"
+
+#: qqlogin.module:245
+msgid "Detach my account with above QQ user"
+msgstr "与此 QQ 用户解除绑定"
+
+#: qqlogin.module:252
+msgid "You have not bound your account with QQ user."
+msgstr "您尚未与 QQ 用户绑定。"
+
+#: qqlogin.module:252
+msgid "Click following button to bound your account."
+msgstr "点击按钮可绑定您的账户。"
+
+#: qqlogin.module:266
+msgid "Successfully detached from @nickname."
+msgstr "与 @nickname 成功解除绑定。"
+
+#: qqlogin.module:315
+msgid "This QQ user"
+msgstr "此 QQ 用户"
+
+#: qqlogin.module:316
+msgid "!nickname is already bound with another account."
+msgstr "!nickname 已与其它账户绑定。"
+
+#: qqlogin.module:339
+msgid "Successfully bound with @nickname."
+msgstr "与 @nickname 成功绑定。"
+
+#: qqlogin.module:339;340;353
+msgid "QQ User"
+msgstr "QQ 用户"
+
+#: qqlogin.module:267;340
+msgid "user"
+msgstr "用户"
+
+#: qqlogin.module:267
+msgid "Detached from QQ user @nick."
+msgstr "与 QQ 用户 @nick 解除绑定。"
+
+#: qqlogin.module:340
+msgid "Bound with QQ user @nick."
+msgstr "与 QQ 用户 @nick 绑定。"
+
+#: qqlogin.module:17
+msgid "QQ Login settings"
+msgstr "QQ 登录设置"
+
+#: qqlogin.module:18
+msgid "QQ Login settings."
+msgstr "QQ 登录设置。"
+
+#: qqlogin.module:30
+msgid "QQ Login binding"
+msgstr "QQ 登录绑定"
+
+#: qqlogin.info:0
+msgid "QQ Login"
+msgstr "QQ 登录"
+
+#: qqlogin.info:0
+msgid "Provides QQ OAuth Login feature for drupal"
+msgstr "提供 Drupal 下的 QQ OAuth 登录功能"
+
+#: qqlogin.info:0
+msgid "Social Network"
+msgstr "社交网络"
+
