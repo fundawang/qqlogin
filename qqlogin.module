@@ -281,7 +281,7 @@ function qqlogin_login_binding_callback($account) {
 			parse_str($r->data, $ret);
 			$access_token=$ret['access_token'];
 			// Step 3: Get openid from access token
-			$url=sprintf('https://graph.z.qq.com/moc2/me?access_token=%s', $ret['access_token']);
+			$url=sprintf('https://graph.z.qq.com/moc2/me?access_token=%s', $access_token);
 			$r=drupal_http_request($url);
 			if(is_object($r) && $r->code == '200') {
 				parse_str($r->data, $ret);
