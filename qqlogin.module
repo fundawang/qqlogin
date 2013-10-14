@@ -250,7 +250,7 @@ function qqlogin_login_binding_form_submit_detach($form, $form_state) {
 	db_delete('qqlogin')->condition('uid',$form_state['storage']['user']->uid)->execute();
 	user_set_authmaps($form_state['storage']['user'], array("authname_qqlogin" => ''));
 	drupal_set_message(t('Successfully detached from @nickname.', array('@nickname'=>$form_state['storage']['qqnickname'])));
-	watchdog('user', 'Detached from QQ user @nick.', array('@user' => $form_state['storage']['qqnickname']));
+	watchdog('user', 'Detached from QQ user @nick.', array('@nick' => $form_state['storage']['qqnickname']));
 }
 
 function qqqlogin_login_binding_form_submit_bound($form, &$form_state) {
