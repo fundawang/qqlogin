@@ -99,6 +99,17 @@ function qqlogin_form_user_login_alter(&$form, &$form_state) {
 	);
 }
 
+function qqlogin_form_user_login_block_alter(&$form, &$form_state) {
+	$form['#action']='';
+	$form['actions']['qqlogin']=array(
+		'#type' => 'image_button',
+		'#src' => 'http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_1.png',
+		'#attributes' => array('title'=>t('Login via QQ User')),
+		'#limit_validation_errors' => array(),
+		'#submit' => array('qqlogin_form_user_login_qqlogin_submit'),
+	);
+}
+
 function qqlogin_form_user_login_qqlogin_submit($form, &$form_state) {
 	$form_state['redirect']=sprintf(
 		'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=%s',
@@ -153,7 +164,9 @@ function qqlogin_login_callback() {
 				parse_str($r->data, $ret);
 				if(isset($ret['openid'])) {
 					$openid=$ret['openid'];
-					user_external_login_register('qq:'.$openid, 'qqlogin');
+					user_external_login_register('qq_openid_'.$openid, 'qqlogin');
+					$user=user_load($GLOBALS['user']->uid);
+					user_save($user, array('mail'=>$openid.'@opensns.qq.com'));
 					$i=db_merge('qqlogin')->key(array('uid'=>$GLOBALS['user']->uid))->fields(array(
 						'uid' => $GLOBALS['user']->uid,
 						'openid' => $openid,
@@ -223,7 +236,7 @@ function qqlogin_login_binding_form($form, &$form_state, $account) {
 			$form['qquser']['#prefix'].=sprintf('<img src="%s" style="vertical-align:middle"/> ', $r->face);
 		else
 			$form['qquser']['#prefix'].=sprintf('<img src="%s"/>', 'http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_1.png');
-		if($account->name == 'qq:'.$r->openid) {
+		if($account->name == 'qq_openid_'.$r->openid) {
 			$form['desc']['#markup'].=t('But your account cannot be detached, because you are registered via QQ user.');
 		} else {
 			$form['detach']=array(
@@ -301,7 +314,7 @@ function qqlogin_login_binding_callback($account) {
 						} else $nick=t('This QQ user');
 						drupal_set_message(t('!nickname is already bound with another account.', array('!nickname'=>$nick)), 'error');
 					} else {
-						user_set_authmaps($account, array("authname_qqlogin" => 'qq:'.$openid));
+						user_set_authmaps($account, array("authname_qqlogin" => 'qq_openid_'.$openid));
 						$i=db_merge('qqlogin')->key(array('uid'=>$account->uid))->fields(array(
 							'uid' => $account->uid,
 							'openid' => $openid,
@@ -334,7 +347,7 @@ function qqlogin_login_binding_callback($account) {
 
 function qqlogin_username_alter(&$username, $account) {
 	$r=db_query('SELECT * FROM {qqlogin} WHERE uid=:uid', array(':uid'=>$account->uid))->fetchObject();
-	if($r && $account->name=='qq:'.$r->openid) {
+	if($r && $account->name=='qq_openid_'.$r->openid) {
 		if(empty($r->name))
 			$usernmae=t('QQ User');
 		else {
