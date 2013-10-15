@@ -434,7 +434,7 @@ function qqlogin_username_alter(&$username, $account) {
 	$r=db_query('SELECT * FROM {qqlogin} WHERE uid=:uid', array(':uid'=>$account->uid))->fetchObject();
 	if($r && $account->name=='qq_openid_'.$r->openid) {
 		if(empty($r->name))
-			$usernmae=t('QQ User');
+			$username=t('QQ User');
 		else {
 			$username=$r->name;
 		}
