@@ -132,10 +132,11 @@ function qqlogin_form_user_login_block_alter(&$form, &$form_state) {
 
 function qqlogin_form_user_login_qqlogin_submit($form, &$form_state) {
 	$form_state['redirect']=sprintf(
-		'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=%s',
+		'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&display=%s',
 		variable_get('qqlogin_appid',''),
 		$GLOBALS['base_url'].base_path().'user/login/qqlogin',
-		'get_user_info'
+		'get_user_info',
+		preg_match('/Mobile/',$_SERVER['HTTP_USER_AGENT'])?'mobile':'desktop'
 	);
 }
 
@@ -351,11 +352,12 @@ function qqqlogin_login_binding_form_submit_bound($form, &$form_state) {
 	$_SESSION['userid']=md5($form_state['storage']['user']->uid);
 	$_SESSION['checksum']=md5(time());
 	$form_state['redirect']=sprintf(
-		'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&state=%s',
+		'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&state=%s&display=%s',
 		variable_get('qqlogin_appid',''),
 		$GLOBALS['base_url'].base_path().'user/'.$form_state['storage']['user']->uid.'/qqlogin_callback',
 		'get_user_info',
-		$_SESSION['checksum']
+		$_SESSION['checksum'],
+		preg_match('/Mobile/',$_SERVER['HTTP_USER_AGENT'])?'mobile':'desktop'
 	);
 }
 
