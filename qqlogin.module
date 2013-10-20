@@ -203,16 +203,21 @@ function qqlogin_login_callback() {
 				parse_str($r->data, $ret);
 				if(isset($ret['openid'])) {
 					$openid=$ret['openid'];
+					$user=user_external_load('qq_openid_'.$openid);
+					if(!empty($user) && $user->status==0) {
+						drupal_set_message(t('The user !name has not been activated or is blocked.', array('!name' => format_username($user))), 'error');
+						drupal_goto('user/login');
+						return;
+					}
 					user_external_login_register('qq_openid_'.$openid, 'qqlogin');
 					$user=user_load($GLOBALS['user']->uid);
 					if(empty($user->mail))
 						user_save($user, array('mail'=>$openid.'@opensns.qq.com'));
-					$i=db_merge('qqlogin')->key(array('uid'=>$GLOBALS['user']->uid))->fields(array(
-						'uid' => $GLOBALS['user']->uid,
+					$i=db_merge('qqlogin')->key(array('uid'=>$user->uid))->fields(array(
+						'uid' => $user->uid,
 						'openid' => $openid,
 						'access_token' => $access_token,
 					))->execute();
-					
 					// Fetch user nick name and save it into database
 					$url=sprintf('https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s',
 						$access_token,
