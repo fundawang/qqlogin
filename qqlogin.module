@@ -60,7 +60,7 @@ function qqlogin_menu() {
  */
 function qqlogin_uninstall() {
 	$settings=array(
-		'appid', 'appkey', 'verifycode'
+		'appid', 'appkey', 'verifycode', 'registerrequired'
 	);
 	foreach($settings as $s) {
 		variable_del('qqlogin_'.$s);
@@ -95,6 +95,12 @@ function qqlogin_admin_form($form, $form_state) {
 		'#size' => 60,
 		'#maxlength' => 80,
 	);
+	$form['registerrequired'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Create user automatically for QQ users which is unbound with existing accouns when logging in'),
+		'#description' => t('If unchecked, user must bind his account with an QQ user at first.'),
+		'#default_value' => variable_get('qqlogin_registerrequired', TRUE),
+	);
 	return system_settings_form($form);
 }
 
@@ -103,7 +109,7 @@ function qqlogin_admin_form_validate($form, $form_state) {
 
 function qqlogin_admin_form_submit($form, $form_state) {
 	$settings=array(
-		'appid', 'appkey', 'verifycode'
+		'appid', 'appkey', 'verifycode', 'registerrequired'
 	);
 	foreach($settings as $s) {
 		variable_set('qqlogin_'.$s,trim($form_state['values'][$s]));
@@ -203,6 +209,25 @@ function qqlogin_login_callback() {
 				parse_str($r->data, $ret);
 				if(isset($ret['openid'])) {
 					$openid=$ret['openid'];
+					$url=sprintf('https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s',
+						$access_token,
+						variable_get('qqlogin_appid',''),
+						$openid
+					);
+					$r=drupal_http_request($url);
+					if(is_object($r) && $r->code == '200') {
+						$ret=json_decode($r->data);
+						if($ret->ret==0)
+							$nickname=$ret->nickname;
+						else $nickname=t('QQ User');
+					} else $nickname=t('QQ User');
+					// If selected openid is not bound yet
+					$authmap=user_get_authmaps('qq_openid_'.$openid);
+					if(empty($authmap) && variable_get('qqlogin_registerrequired', TRUE)==FALSE) {
+						drupal_set_message(t('!name has not been bound with existing users yet. You must first register an account and login, then bound your account with QQ user.', array('!name' => $nickname)), 'error');
+						drupal_goto('user/login');
+						return;						
+					}
 					$user=user_external_load('qq_openid_'.$openid);
 					if(!empty($user) && $user->status==0) {
 						drupal_set_message(t('The user !name has not been activated or is blocked.', array('!name' => format_username($user))), 'error');
@@ -217,22 +242,8 @@ function qqlogin_login_callback() {
 						'uid' => $user->uid,
 						'openid' => $openid,
 						'access_token' => $access_token,
+						'name' => $nickname,
 					))->execute();
-					// Fetch user nick name and save it into database
-					$url=sprintf('https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s',
-						$access_token,
-						variable_get('qqlogin_appid',''),
-						$openid
-					);
-					$r=drupal_http_request($url);
-					if(is_object($r) && $r->code == '200') {
-						$ret=json_decode($r->data);
-						if($ret->ret==0) {
-							db_update('qqlogin')->condition('openid',$openid)->fields(array(
-								'name' => $ret->nickname,
-							))->execute();
-						}
-					}
 					if($i==MergeQuery::STATUS_INSERT)
 						drupal_goto('user/'.$GLOBALS['user']->uid.'/edit');
 					else
