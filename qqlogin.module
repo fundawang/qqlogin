@@ -203,12 +203,13 @@ function qqlogin_login_callback() {
 			parse_str($r->data, $ret);
 			$access_token=$ret['access_token'];
 			// Step 3: Get openid from access token
-			$url=sprintf('https://graph.z.qq.com/moc2/me?access_token=%s', $access_token);
+			$url=sprintf('https://graph.qq.com/oauth2.0/me?access_token=%s', $access_token);
 			$r=drupal_http_request($url);
 			if(is_object($r) && $r->code == '200') {
-				parse_str($r->data, $ret);
-				if(isset($ret['openid'])) {
-					$openid=$ret['openid'];
+				$a=strstr($r->data, '{');
+				$ret=json_decode(substr($a, 0, strpos($a, '}')+1));
+				if(isset($ret->openid)) {
+					$openid=$ret->openid;
 					$url=sprintf('https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s',
 						$access_token,
 						variable_get('qqlogin_appid',''),
